@@ -7,20 +7,20 @@ open Helpers
 let generateTree width lineLength angle = 
     let trunk = { StartPoint= Point(width/2,0); EndPoint = Point(width/2,lineLength) }
     
-    let newLine seed angle = { StartPoint= seed.EndPoint; EndPoint = rotateWrtPoint (Point(seed.EndPoint.X,seed.EndPoint.Y + lineLength))  seed.EndPoint angle }
-    let left seed = newLine seed angle
-    let right seed = newLine seed -angle
+    let newLine seed length angle = { StartPoint= seed.EndPoint; EndPoint = rotateWrtPoint (Point(seed.EndPoint.X,seed.EndPoint.Y + length))  seed.EndPoint angle }
+    let left length seed = newLine seed length angle
+    let right length seed = newLine seed length -angle
     
-    let rec next previousLevel = 
+    let rec next lineLength seeds = 
         seq {
-            yield seq { yield! previousLevel }
+            yield seq { yield! seeds }
             yield! 
-                [ previousLevel |> Seq.map left;  previousLevel |> Seq.map right ] 
+                [ seeds |> Seq.map (left lineLength); seeds |> Seq.map (right lineLength) ] 
                 |> List.toSeq 
                 |> Seq.concat 
-                |> next
+                |> next (lineLength/2)
         }
-    seq { yield trunk } |> next
+    seq { yield trunk } |> (next lineLength)
 
 let drawLine (graphics : Graphics) pen (line : Line) =
     graphics.DrawLine(pen,line.StartPoint,line.EndPoint)
