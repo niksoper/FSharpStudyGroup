@@ -28,5 +28,7 @@ let rotateWrtOrigin (p : Point) (angle : float<degree>) =
     Point(newX,newY)
 
 let rotateWrtPoint (p : Point) (aroundPoint : Point) (angle : float<degree>) = 
-    addPoints aroundPoint <| rotateWrtOrigin (subtractPoints p aroundPoint) angle
-
+    let result = addPoints aroundPoint <| rotateWrtOrigin (subtractPoints p aroundPoint) angle
+    printfn "Rotating %A around %A by %A degrees to make %A" p aroundPoint angle result
+    result
+    
