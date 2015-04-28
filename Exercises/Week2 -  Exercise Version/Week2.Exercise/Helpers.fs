@@ -3,7 +3,11 @@
 open System.Drawing
 open System
 
-type Line = {StartPoint : Point; EndPoint : Point}
+type TreeNode(Start: Point, End: Point) =
+    member this.ChildNodes length angle =
+        seq {
+            yield new TreeNode(Start = this.End, End = rotateWrtPoint (Point(this.End.X, this.End.Y + length))  this.End angle)
+        }   
 
 [<Measure>] type radian
 [<Measure>] type degree
